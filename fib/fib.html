@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly Fibonacci Calculator</title>
+    <style>
+        /* Add some basic styling to make it look like C code */
+        pre {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            white-space: pre-wrap; /* Preserve line breaks */
+        }
+    </style>
+</head>
+<body>
+
+    <label for="numberInput">Enter a number:</label>
+    <input type="number" id="numberInput" min="0">
+    <button onclick="calculateFibonacci()">Calculate Fibonacci</button>
+
+    <div id="codeSnippets">
+        <pre>
+long fib_recursive(int n) {
+    if (n <= 0)
+        return 0;
+    else if (n == 1)
+        return 1;
+    else
+        return fib_recursive(n-2) + fib_recursive(n-1);
+}
+        </pre>
+
+        <pre>
+long fib_dynamic_programming(int n) {
+    if(n <= 0)
+        return 0;
+    long f0 = 0;
+    long f1 = 1;
+    while (n-- > 1){
+        long temp = f1 + f0;
+        f0 = f1;
+        f1 = temp;
+    }
+    return f1;
+}
+        </pre>
+    </div>
+
+    <div id="resultOutput"></div>
+
+    <script>
+        // Declare instance globally
+        let instance;
+
+        // Fetch and compile WebAssembly module
+        fetch("fib.wasm")
+        .then(bytes => bytes.arrayBuffer())
+        .then(mod => WebAssembly.compile(mod))
+        .then(mod => {
+            instance = new WebAssembly.Instance(mod);
+        })
+        .catch(error => console.error("Error loading WebAssembly module:", error));
+
+        // Function to display "Calculating..." message
+        function displayCalculatingMessage() {
+            const resultOutput = document.getElementById("resultOutput");
+            // Clear existing results
+            resultOutput.innerHTML = '';
+            // Display "Calculating..." message
+            resultOutput.innerHTML += `<p>Calculating...</p>`;
+        }
+
+        // Function to calculate Fibonacci and update result
+        async function performFibonacciCalculations() {
+            const numberInput = document.getElementById("numberInput");
+            const resultOutput = document.getElementById("resultOutput");
+
+            if (instance && numberInput.value !== "") {
+                const inputValue = parseInt(numberInput.value);
+
+                // Display "Calculating..." message
+                displayCalculatingMessage();
+
+                // Introduce a small delay using setTimeout
+                await new Promise(resolve => setTimeout(resolve, 10));
+
+                // Measure time for recursive Fibonacci
+                const startRecursive = performance.now();
+                const recursiveResult = instance.exports.fib_recursive(inputValue);
+                const endRecursive = performance.now();
+                const recursiveTime = endRecursive - startRecursive;
+
+                // Measure time for dynamic programming Fibonacci
+                const startDynamic = performance.now();
+                const dynamicResult = instance.exports.fib_dynamic_programming(inputValue);
+                const endDynamic = performance.now();
+                const dynamicTime = endDynamic - startDynamic;
+
+                // Display results and time
+                resultOutput.innerHTML += `
+                    <p>Recursive Fibonacci (${inputValue}): ${recursiveResult}</p>
+                    <p>Time taken for recursive Fibonacci: ${(recursiveTime / 1000).toFixed(4)} seconds</p>
+                    <p>Dynamic Programming Fibonacci (${inputValue}): ${dynamicResult}</p>
+                    <p>Time taken for dynamic programming Fibonacci: ${(dynamicTime / 1000).toFixed(4)} seconds</p>
+                `;
+            } else {
+                resultOutput.textContent = "Error: WebAssembly module not loaded or input is empty.";
+            }
+        }
+
+        // Function to calculate Fibonacci with async/await
+        async function calculateFibonacci() {
+            await performFibonacciCalculations();
+        }
+    </script>
+
+</body>
+</html>
