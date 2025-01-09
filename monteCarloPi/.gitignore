@@ -1,0 +1,59 @@
+# General C++ build files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.a
+*.lib
+
+# CMake-specific files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Emscripten-specific files
+*.wasm
+*.js
+*.data
+*.asm.js
+*.html
+
+# Build directories
+build/
+dist/
+out/
+bin/
+lib/
+
+# IDE/Editor-specific files
+.idea/
+.vscode/
+*.swp
+*~ 
+*.ncb
+*.sdf
+*.suo
+*.mode1v3
+*.mode2v3
+*.vcproj*
+*.project
+*.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Generated documentation
+docs/doxygen/
+
+# Other OS-specific files
+Thumbs.db
+.DS_Store
+._*
+
+

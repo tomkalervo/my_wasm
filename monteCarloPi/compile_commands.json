@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/tomkarlsson/Projects/tinker/monteCarloPi",
+  "command": "/usr/local/Cellar/emscripten/3.1.74/libexec/em++  @CMakeFiles/mcp.dir/includes_CXX.rsp  -s USE_SDL=2 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -std=gnu++17 -o CMakeFiles/mcp.dir/mcp.cpp.o -c /Users/tomkarlsson/Projects/tinker/monteCarloPi/mcp.cpp",
+  "file": "/Users/tomkarlsson/Projects/tinker/monteCarloPi/mcp.cpp",
+  "output": "CMakeFiles/mcp.dir/mcp.cpp.o"
+}
+]
