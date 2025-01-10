@@ -263,6 +263,8 @@ static void reset_loop() {
   MonteCarlo.n = 0;
   MonteCarlo.p_count = 0;
   Assets.random_pixels = 1;
+  Assets.prev_len = 0;
+  Assets.runtime = SDL_GetTicks64();
   Uint32 white = SDL_MapRGB(Assets.surface->format, 255, 255, 255);
   SDL_LockSurface(Assets.surface);
   SDL_FillRect(Assets.surface, NULL, white);
@@ -345,6 +347,7 @@ static void render_out() {
 
 static void pause_loop() {
   Assets.pause = !Assets.pause;
+  Assets.runtime = SDL_GetTicks64();
   if (Assets.pause) {
     render_out();
     if (!Assets.surface_bg) {
